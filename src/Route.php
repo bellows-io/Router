@@ -16,7 +16,7 @@ class Route {
 	public function __construct($path) {
 		$this->path = $path;
 
-		if (! preg_match_all('/\\{\\{(?P<name>[a-z]+)(\|(?P<charset>[^}}]+))\\}\\}/i', $path, $matches)) {
+		if (! preg_match_all('/\\{\\{(?P<name>[a-z]+)(\|(?P<charset>[^}}]+))?\\}\\}/i', $path, $matches)) {
 			throw new \Exception("Could not match path `$path`");
 		}
 
@@ -24,7 +24,7 @@ class Route {
 		$template = $path;
 		foreach ($matches[0] as $i => $selector) {
 			$name = $matches['name'][$i];
-			$charset = isset($matches['charset'][$i]) ? $matches['charset'][$i] : self::CHARSET_ANY;
+			$charset = $matches['charset'][$i] ?: self::CHARSET_ANY;
 			$subRegex = "(?P<$name>";
 			if ($charset == self::CHARSET_TEXT) {
 				$subRegex .= '[a-z]';
