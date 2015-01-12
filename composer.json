@@ -1,0 +1,8 @@
+{
+	"name"        : "bellows/router",
+	"description" : "Simple regex based router",
+	"license"     : "MIT",
+	"autoload": {
+		"psr-4": {"Router\\":"src/"}
+	}
+}
