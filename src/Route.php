@@ -12,25 +12,26 @@ class Route {
 	protected $regex;
 	protected $template;
 	protected $tokens = array();
+	protected $callback;
 
-	public function __construct($path) {
+	public function __construct($path, callable $callback) {
 		$this->path = $path;
+		$this->callback = $callback;
 
 		if (! preg_match_all('/\\{\\{(?P<name>[a-z]+)(\|(?P<charset>[^}}]+))?\\}\\}/i', $path, $matches)) {
 			throw new \Exception("Could not match path `$path`");
 		}
-
 		$regex = '/'.str_replace('/', '\\/', $path).'/i';
 		$template = $path;
 		foreach ($matches[0] as $i => $selector) {
 			$name = $matches['name'][$i];
-			$charset = $matches['charset'][$i] ?: self::CHARSET_ANY;
+			$charset = isset($matches['charset'][$i]) ? $matches['charset'][$i] : self::CHARSET_ANY;
 			$subRegex = "(?P<$name>";
 			if ($charset == self::CHARSET_TEXT) {
 				$subRegex .= '[a-z]';
 			} elseif ($charset == self::CHARSET_NUMERIC) {
 				$subRegex .= '[0-9]';
-			} elseif ($charset == self::CHARSET_ANY) {
+			} elseif (! $charset || $charset == self::CHARSET_ANY) {
 				$subRegex .= '.';
 			} else {
 				throw new \Exception("Invalid charset: `$charset`");
@@ -66,7 +67,7 @@ class Route {
 					$data[$name] = $value;
 				}
 			}
-			return $data;
+			return call_user_func($this->callback, $data);
 		}
 		return false;
 	}
