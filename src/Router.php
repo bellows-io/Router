@@ -42,7 +42,7 @@ class Router {
 		}
 		if (is_array($this->routes[$name])) {
 			foreach ($this->routes[$name] as $route) {
-				if ($route->hasTokens($token)) {
+				if ($route->hasTokens($tokens)) {
 					return $route->build($arguments);
 				}
 			}
