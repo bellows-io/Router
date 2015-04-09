@@ -26,6 +26,7 @@ class Router {
 						return $routeData;
 					}
 				}
+				return null;
 			}
 			if ($routeData = $route->match($uri)) {
 				$routeName = $name;
@@ -35,7 +36,7 @@ class Router {
 		return null;
 	}
 
-	public function build($name, $arguments) {
+	public function build($name, array $arguments) {
 		$tokens = array_keys($arguments);
 		if (! array_key_exists($name, $this->routes)) {
 			return null;
@@ -46,6 +47,7 @@ class Router {
 					return $route->build($arguments);
 				}
 			}
+			return null;
 		}
 		return $this->routes[$name]->build($arguments);
 	}
