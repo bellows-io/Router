@@ -8,16 +8,16 @@ Really simple right now... Need to add a notion of named routes. Right now route
 use Router\Router;
 
 $router = new Router();
-$router->register("/users/{{username|text}}");
-$router->register("/files/{{filename}}");
+$router->register('user', "/users/{{username|text}}");
+$router->register('file', "/files/{{filename}}");
 
-$routeData = $router->route("/users/oranj");
+$routeData = $router->route('user', "/users/oranj");
 // $routeData: ['username' => 'oranj']
 
-echo $router->build(['username' => 'oranj']).PHP_EOL;
+echo $router->build('user', ['username' => 'oranj']).PHP_EOL;
 // /users/oranj
 
-echo $router->build(['filename' => 'README.md']).PHP_EOL;
+echo $router->build('file', ['filename' => 'README.md']).PHP_EOL;
 // /files/README.md
 
 ```
