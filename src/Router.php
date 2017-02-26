@@ -18,6 +18,7 @@ class Router {
 	}
 
 	public function route($uri, &$routeName = null) {
+
 		foreach ($this->routes as $name => $route) {
 			if (is_array($route)) {
 				foreach ($route as $r) {
@@ -26,9 +27,7 @@ class Router {
 						return $routeData;
 					}
 				}
-				return null;
-			}
-			if ($routeData = $route->match($uri)) {
+			} else if ($routeData = $route->match($uri)) {
 				$routeName = $name;
 				return $routeData;
 			}

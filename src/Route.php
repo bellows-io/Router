@@ -19,7 +19,10 @@ class Route {
 		$this->callback = $callback;
 
 		if (! preg_match_all('/\\{\\{(?P<name>[a-z]+)(\|(?P<charset>[^}}]+))?\\}\\}/i', $path, $matches)) {
-			throw new \Exception("Could not match path `$path`");
+			$this->regex = '//';
+			$this->template = '';
+			// throw new \Exception("Could not match path `$path`");
+			return;
 		}
 		$regex = '/'.str_replace('/', '\\/', $path).'/i';
 		$template = $path;
